@@ -1,0 +1,23 @@
+@import "../scss/common";
+
+html,
+body,
+.appBody {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+  font-size: 15px;
+  color: #535353;
+  box-sizing: border-box;
+}
+
+
+.page-move-enter, .page-move-leave-active{
+  transform: translate(100%, 0);
+}
+.page-move-enter-active, .page-move-leave-active{
+  transition: transform .3s;
+}
+

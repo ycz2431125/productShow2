@@ -1,0 +1,37 @@
+$red:#ff4947;
+
+@mixin wordHidden {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin wordHidden_2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@mixin enlarge($s) {
+  &:active {
+    transform: scale($s);
+    -webkit-transform: scale($s);
+  }
+}
+
+@mixin iconCode($c) {
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  content: $c;
+}
+
+@mixin wrap {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
