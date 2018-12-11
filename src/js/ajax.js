@@ -33,20 +33,20 @@ axios.interceptors.response.use(response => {
 }, err => {
   let errMes;
 
-  if (err.response && err.response.path){
+  if (err.response && err.response.path) {
     errMes = err.response.data;
-  }else {
+  } else {
     errMes = {
-      status:err.response.status,
-      path:err.response.data,
+      status: err.response.status,
+      path: err.response.data,
     };
   }
 
   _methods.notify(errMes.path,
     3,
     {
-      title:errMes.status,
-      duration:0,
+      title: errMes.status,
+      duration: 0,
     });
 
   return Promise.resolve(err);
@@ -65,16 +65,15 @@ global.ajax.request = (url, param, method = "get",) => {
       })
     }).then(res => {
       let rd = res.data;
-      if (rd){
-        if (rd.code == 1){
+      if (rd) {
+        if (rd.code == 1) {
           resolve(rd)
-        }else {
-          _methods.mes(rd.msg,2,false,1);
+        } else {
+          // _methods.mes(rd.msg,2,false,1);
         }
       }
     })
   })
-
 };
 
 // window._ajax.loading = (url, param, method = "get")=>{

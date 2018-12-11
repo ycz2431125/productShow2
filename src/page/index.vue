@@ -82,7 +82,7 @@
       }
     },
     created() {
-
+      global.ajax.request("/demo");
     },
     components: {
       cubePage,
