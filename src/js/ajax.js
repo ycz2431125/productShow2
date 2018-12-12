@@ -42,48 +42,14 @@ axios.interceptors.response.use(response => {
     };
   }
 
-  _methods.notify(errMes.path,
-    3,
-    {
-      title: errMes.status,
-      duration: 0,
-    });
+  console.log({
+    title: errMes.status,
+    duration: 0,
+  });
 
   return Promise.resolve(err);
 });
 
-global.ajax = {};
 
-global.ajax.request = (url, param, method = "get",) => {
-  return new Promise((resolve) => {
-    axios({
-      method: method,
-      url,
-      params: param,
-      cancelToken: new CancelToken(c => {
-        cancel = c
-      })
-    }).then(res => {
-      let rd = res.data;
-      if (rd) {
-        if (rd.code == 1) {
-          resolve(rd)
-        } else {
-          // _methods.mes(rd.msg,2,false,1);
-        }
-      }
-    })
-  })
-};
-
-// window._ajax.loading = (url, param, method = "get")=>{
-//   _methods.loading.show();
-//   return new Promise((resolve)=>{
-//     _ajax.request(url, param, method).then((d)=>{
-//       _methods.loading.close();
-//       resolve(d);
-//     })
-//   });
-// };
 
 

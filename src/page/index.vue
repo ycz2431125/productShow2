@@ -5,7 +5,7 @@
       icon="1"
       @rightIconClick="riClick"
       :title="title"
-    >
+      :backShow="backShow">
       <div slot="content">
         <div class="view-wrapper">
           <cube-scroll-nav
@@ -33,7 +33,6 @@
     </cubePage>
     <cubeView></cubeView>
   </div>
-
 </template>
 
 <script>
@@ -49,6 +48,7 @@
         title: "王者小店",
         current: "",
         picker: false,
+        backShow: false,
         goods: gd
       }
     },
@@ -82,7 +82,7 @@
       }
     },
     created() {
-      global.ajax.request("/demo");
+      gl.ajax.request("/demo");
     },
     components: {
       cubePage,

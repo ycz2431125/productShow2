@@ -2,7 +2,7 @@
   <div class="cube-page" :class="type">
     <header class="header">
       <h1>{{title}}</h1>
-      <i @click="back" class="cubeic-back ic"></i>
+      <i @click="back" class="cubeic-back ic" v-if=""></i>
       <i v-if="rightIcon" @click="rightIconClick" class="cubeic-right ic" :class="rightIcon"></i>
     </header>
     <div class="wrapper">
@@ -39,6 +39,9 @@
       content: {
         type: String,
         default: ''
+      },
+      backShow: {
+        default: true
       }
     },
     methods: {
