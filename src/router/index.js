@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/page/index'
-import addGoods from '@/page/addGoods/addGoods.vue'
+
+const note = () => import('@/page/note/note.vue');
+const addNote = () => import('@/page/note/addNote.vue');
+const index = () => import('@/page/goods/index.vue');
+const addGoods = () => import('@/page/goods/addGoods.vue');
+
 
 Vue.use(Router)
 
@@ -14,6 +18,17 @@ export default new Router({
         {
           path: '/index/addGoods',
           component: addGoods
+        }
+      ]
+    },
+    {
+
+      path: '/note',
+      component: note,
+      children:[
+        {
+          path: '/note/addNote',
+          component: addNote
         }
       ]
     },

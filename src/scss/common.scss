@@ -14,24 +14,9 @@ $red:#ff4947;
   -webkit-line-clamp: 2;
 }
 
-@mixin enlarge($s) {
-  &:active {
-    transform: scale($s);
-    -webkit-transform: scale($s);
-  }
-}
-
 @mixin iconCode($c) {
   font-family: "iconfont" !important;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   content: $c;
 }
-
-@mixin wrap {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-

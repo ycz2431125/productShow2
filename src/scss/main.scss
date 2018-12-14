@@ -1,4 +1,6 @@
 @import "../scss/common";
+@import "../scss/reset.css";
+@import "../scss/animate";
 
 html,
 body,
@@ -11,6 +13,20 @@ body,
   font-size: 15px;
   color: #535353;
   box-sizing: border-box;
+}
+.content{
+  margin: 0!important;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  clear:both;
+  .content-wrap{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
 }
 
 

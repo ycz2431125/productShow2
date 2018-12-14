@@ -6,6 +6,11 @@ import axios from 'axios'
 
 window.gl = {};
 
+gl.data = {
+  routerIsBack: true,
+  userId:1
+};
+
 gl.methods = {
   setVueX(key, value) {
     store.commit(key, value);
@@ -14,8 +19,24 @@ gl.methods = {
     this.setVueX("_headerTitle", value);
   },
   goPath(path, data = {}) {
+    gl.data.routerIsBack = false;
     router.push({path: path, query: data});
-  }
+  },
+  alert(title = "提示",content = "",){
+    Vue.prototype.$createDialog({
+      type: 'alert',
+      title:title,
+      content:content,
+      onConfirm: () => {
+        console.log(123213);
+        resolve(true);
+      },
+    }).show();
+  },
+  goBack(index = -1){
+    gl.data.routerIsBack = true;
+    window.history.go(index);
+  },
 };
 
 gl.ajax = {
@@ -24,7 +45,7 @@ gl.ajax = {
       axios({
         method: method,
         url,
-        params: param,
+        data: param,
       }).then(res => {
         let rd = res.data;
         if (rd) {

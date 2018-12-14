@@ -1,15 +1,13 @@
 import axios from 'axios'
-// import qs from 'qs'
 
 let cancel, promiseArr = {}
-const CancelToken = axios.CancelToken;
 
 axios.defaults.baseURL = '/td'
 
-//设置默认请求头
-axios.defaults.headers = {
-  'X-Requested-With': 'XMLHttpRequest'
-};
+// //设置默认请求头
+// axios.defaults.headers = {
+//   'X-Requested-With': 'XMLHttpRequest'
+// };
 
 axios.defaults.timeout = 30000;
 

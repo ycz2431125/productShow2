@@ -1,14 +1,12 @@
 <template>
   <div id="app" class="appBody">
-    <transition name="page-move">
-      <router-view />
-    </transition>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  export default {
+    name: 'app'
+  }
 </script>
 

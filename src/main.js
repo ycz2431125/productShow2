@@ -1,35 +1,30 @@
-
 import Vue from 'vue'
-import './js/ajax'
-import './js/common'
 import store from './js/vuex'
-
 import App from './App'
 import router from './router'
 
 import './scss/main.scss'
 
-import {
-  Style,
-  Button,
-  Loading,
-  scrollNav,
-  picker,
-  sticky,
-  actionSheet,
-  form,
-} from 'cube-ui'
+import Cube from 'cube-ui'
 
-Vue.use(Button)
-Vue.use(Loading)
-Vue.use(scrollNav)
-Vue.use(sticky)
-Vue.use(picker)
-Vue.use(actionSheet)
-Vue.use(form)
-
+Vue.use(Cube)
 
 Vue.config.productionTip = false
+
+import './js/ajax'
+import './js/common'
+// 123
+
+// router.beforeEach((to, from, next) => {
+//   if (gl.data.routerIsBack) {
+//     store.commit("_routerAn","pageSlideRight");
+//   }
+//   else {
+//     store.commit("_routerAn","pageSlideLeft");
+//     gl.data.routerIsBack = true;
+//   }
+//   next();
+// });
 
 new Vue({
   el: '#app',

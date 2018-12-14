@@ -36,9 +36,9 @@
 </template>
 
 <script>
-  import cubePage from "../components/cube-page";
-  import cubeView from "../components/cube-view";
-  import goodsData from '../data/goods-list.json'
+  import cubePage from "../../components/cube-page";
+  import cubeView from "../../components/cube-view";
+  import goodsData from '../../data/goods-list.json'
 
   let gd = goodsData.goods;
 
