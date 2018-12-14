@@ -136,6 +136,7 @@
           content: this.model.content,
           userId: gl.data.userId,
         }, "post").then(v => {
+          gl.data.bus.$emit("noteListChane",1);
           this.$createDialog({
             type: 'alert',
             title:"提示",

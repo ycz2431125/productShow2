@@ -8,8 +8,9 @@ window.gl = {};
 
 gl.data = {
   routerIsBack: true,
-  userId:1
-};
+  userId: 1,
+  bus: new Vue()
+}
 
 gl.methods = {
   setVueX(key, value) {
@@ -22,31 +23,46 @@ gl.methods = {
     gl.data.routerIsBack = false;
     router.push({path: path, query: data});
   },
-  alert(title = "提示",content = "",){
+  alert(title = "提示", content = "",) {
     Vue.prototype.$createDialog({
       type: 'alert',
-      title:title,
-      content:content,
+      title: title,
+      content: content,
       onConfirm: () => {
-        console.log(123213);
         resolve(true);
       },
     }).show();
   },
-  goBack(index = -1){
+  goBack(index = -1) {
     gl.data.routerIsBack = true;
     window.history.go(index);
+  },
+  //防抖
+  deBounce(something, delay) {
+    if (window.debounceF) clearTimeout(window.debounceF);
+    window.debounceF = setTimeout(function () {
+      something();
+    }, delay);
   },
 };
 
 gl.ajax = {
-  request(url, param, method = "get",){
+  request(url, param, method = "get",) {
+
+    let data = {
+      method: method,
+      url,
+    };
+
+    if (method == "post") {
+      data.data = param;
+    }
+    else {
+      data.params = param;
+    }
+
     return new Promise((resolve) => {
-      axios({
-        method: method,
-        url,
-        data: param,
-      }).then(res => {
+      axios(data).then(res => {
         let rd = res.data;
         if (rd) {
           if (rd.code == 1) {

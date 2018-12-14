@@ -7,13 +7,16 @@ const router = require('koa-router')({
 
 const demo = require('../controllers/demo')
 const addNote = require('../controllers/addNote')
+const getNoteList = require('../controllers/getNoteList')
 
-// const index = require('../src/index.html')
+
+// const index = require('../src/index.html') //静态文件读取
 
 router.get('/demo', demo)
 
+router.get('/getNoteList', getNoteList)
+
 router.post('/addNote', addNote)
 
-// router.get('/index', index)
 
 module.exports = router
