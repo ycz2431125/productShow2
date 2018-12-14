@@ -13,7 +13,6 @@ Vue.config.productionTip = false
 
 import './js/ajax'
 import './js/common'
-// 123
 
 // router.beforeEach((to, from, next) => {
 //   if (gl.data.routerIsBack) {
