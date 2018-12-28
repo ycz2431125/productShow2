@@ -10,7 +10,7 @@ gl.data = {
   routerIsBack: true,
   userId: 1,
   bus: new Vue()
-}
+};
 
 gl.methods = {
   setVueX(key, value) {
@@ -44,6 +44,9 @@ gl.methods = {
       something();
     }, delay);
   },
+  getNoteDetail(id) {
+    return gl.ajax.request("/getNoteDetail", {id}, "get");
+  },
 };
 
 gl.ajax = {
@@ -54,7 +57,7 @@ gl.ajax = {
       url,
     };
 
-    if (method == "post") {
+    if (method == "post" || method == "put") {
       data.data = param;
     }
     else {

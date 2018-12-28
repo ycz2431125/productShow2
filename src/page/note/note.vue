@@ -2,7 +2,7 @@
   <div>
     <cubePage
       :title="title"
-      icon="1"
+      icon="2"
       @rightIconClick="riClick">
       <div slot="content" class="content-wrap" id="content">
         <search @inputValue="searchWordGet"></search>
@@ -12,16 +12,26 @@
                        @pulling-down="onPullingDown"
                        @pulling-up="onPullingUp"
                        :options="options">
-            <ul class="note-list-wrap">
-              <li class="note-list-item" v-for="note in noteList">
-                <h5 class="note-list-item-title">
-                  {{note.title}}
-                </h5>
-                <div class="note-list-item-from">
-                  {{note.writerInfo.name}} <span style="padding: 0 4px"></span> {{note.createTime}}
-                </div>
-              </li>
-            </ul>
+            <div>
+              <transition-group enter-active-class="animated bounceInLeft"
+                                leave-active-class="animated bounceOutLeft">
+                <slideDelete
+                  v-for="(item,index) in noteList"
+                  :slideBtn="slideBtn"
+                  :key="item.id"
+                  @slideBtnClick="slideBtnClick($event,index,item)"
+                  :ref="index + 'note'">
+                  <div slot="content">
+                    <h5 class="note-list-item-title">
+                      {{item.title}}
+                    </h5>
+                    <div class="note-list-item-from">
+                      {{item.writerInfo.name}} <span style="padding: 0 4px"></span> {{item.createTime}}
+                    </div>
+                  </div>
+                </slideDelete>
+              </transition-group>
+            </div>
           </cube-scroll>
         </div>
       </div>
@@ -34,6 +44,7 @@
   import cubePage from "../../components/cube-page";
   import cubeView from "../../components/cube-view";
   import search from "../../components/search";
+  import slideDelete from "../../components/slideDelete";
 
   export default {
     name: "note",
@@ -45,6 +56,7 @@
         height: "400px",
         page: 1,
         size: 10,
+        noMore: false,
         noteList: [],
         options: {
           pullDownRefresh: {
@@ -57,7 +69,11 @@
               noMore: '没有更多数据'
             }
           },
-        }
+        },
+        slideBtn: [
+          {txt: "编辑", value: 1, bc: "#3f51b5"},
+          {txt: "删除", value: 2, bc: ""},
+        ]
       }
     },
     methods: {
@@ -65,40 +81,49 @@
         this.getNotList();
       },
       onPullingUp() {
+        if (this.noMore) {
+          this.scrollEnd();
+          return;
+        }
         this.getNotList(false, true);
       },
       riClick() {
-        this.$createActionSheet({
-          // title: '设置',
-          // active: 0,
-          data: [
-            {
-              content: '添加日志',
-            },
-            {
-              content: '编辑日志',
-            },
-          ],
-          onSelect: (item, index) => {
-            let path = {
-              0: "/note/addNote",
-              1: "",
-            }[index];
-            gl.methods.goPath(path);
-            console.log(index);
-          }
-        }).show()
+        gl.methods.goPath("/note/addNote");
+        // this.$createActionSheet({
+        //   // title: '设置',
+        //   // active: 0,
+        //   data: [
+        //     {
+        //       content: '添加日志',
+        //     },
+        //     {
+        //       content: '编辑日志',
+        //     },
+        //   ],
+        //   onSelect: (item, index) => {
+        //     let path = {
+        //       0: "/note/addNote",
+        //       1: "",
+        //     }[index];
+        //     gl.methods.goPath(path);
+        //   }
+        // }).show()
       },
-      getNotList(refresh = true, loadMore = false , search = false) {
+      getNotList(refresh = true, loadMore = false, search = false) {
 
         if (refresh) {
           this.keyWord = "";
           this.page = 1;
-          this.size = 10;
+          this.noMore = false;
         }
 
         if (loadMore) {
           this.page = this.page + 1;
+        }
+
+        if (search) {
+          this.page = 1;
+          this.noMore = false;
         }
 
         let ad = {
@@ -111,12 +136,12 @@
           let list = v.data;
 
           if (!list.length) {
+            this.noMore = true;
             this.scrollEnd();
           }
 
           if (refresh || search) {
             this.noteList = list;
-            console.log(this.noteList);
           }
 
           if (loadMore) {
@@ -128,17 +153,39 @@
           }
 
         });
-
       },
       searchWordGet(v) {
         this.keyWord = v.trim();
-        gl.methods.deBounce(()=>{
-          this.getNotList(false, false,true)
+        gl.methods.deBounce(() => {
+          this.getNotList(false, false, true)
         }, 200);
       },
       scrollEnd() {
         this.$refs.scroll.forceUpdate();
-      }
+      },
+      async slideBtnClick(btn, index, note) {
+
+        let closeSlide = () => {
+          this.$refs[index + 'note'][0].slideBtnMove();
+        };
+
+        closeSlide();
+
+        let vl = btn.value;
+
+        switch (vl) {
+          case 1:
+            //编辑
+            gl.methods.goPath(`/note/addNote?id=${note.id}`);
+            break;
+          case 2:
+            //删除
+            await gl.ajax.request("/deleteNote", {id: note.id},"delete");
+            this.noteList.splice(index, 1);
+            break;
+        }
+
+      },
     },
     created() {
       // gl.ajax.request("/demo", {demo: "demo111"});
@@ -154,39 +201,25 @@
       cubePage,
       cubeView,
       search,
+      slideDelete,
     }
   }
-
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
   @import "../../scss/common";
-
-  .note-list-wrap {
-    .note-list-item {
-      height: 70px;
-      padding: 12px 10px;
-      width: 100%;
-      border-bottom: 1px solid #d8d8d8;
-      background: #fff;
-      box-sizing: border-box;
-      &:last-child {
-        border: none;
-      }
-      .note-list-item-title {
-        width: 100%;
-        line-height: 1.2;
-        font-size: 15px;
-        font-weight: 600;
-        @include wordHidden_2;
-      }
-      .note-list-item-from {
-        font-size: 13px;
-        color: #ada3a3;
-        margin-top: 6px;
-        text-align: left;
-      }
-    }
+  .note-list-item-title {
+    width: 100%;
+    line-height: 1.2;
+    font-size: 15px;
+    font-weight: 600;
+    @include wordHidden_2;
+  }
+  .note-list-item-from {
+    font-size: 13px;
+    color: #ada3a3;
+    margin-top: 6px;
+    text-align: left;
   }
 </style>
 

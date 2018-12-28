@@ -19,6 +19,7 @@
   import cubePage from "../../components/cube-page";
   import cubeView from "../../components/cube-view";
   import buttonGroup from "../../components/cube-button-group";
+
   export default {
     data() {
       return {
@@ -39,7 +40,8 @@
                   modelKey: 'title',
                   label: '日志标题',
                   props: {
-                    placeholder: '请输入日志标题'
+                    placeholder: '请输入日志标题',
+                    readonly: false,
                   },
                   rules: {
                     required: true
@@ -53,6 +55,7 @@
                   props: {
                     placeholder: '请输入日志内容',
                     maxlength: 200,
+                    readonly: false,
                   },
                   trigger: 'blur'
                 },
@@ -113,7 +116,8 @@
           scrollToInvalidField: true,
           layout: 'classic' // standard fresh
         },
-        files: []
+        files: [],
+        id: "",
       }
     },
     methods: {
@@ -131,16 +135,35 @@
       },
       submitHandler(e) {
         e.preventDefault();
+        if (this.id) {
+          gl.ajax.request("/updateNote", {
+            title: this.model.title,
+            content: this.model.content,
+            id: this.id,
+            userId: gl.data.userId,
+          }, "put").then(() => {
+            gl.data.bus.$emit("noteListChane", 1);
+            this.$createDialog({
+              type: 'alert',
+              title: "提示",
+              content: "编辑日志成功",
+              onConfirm: () => {
+                gl.methods.goBack();
+              },
+            }).show();
+          });
+          return false;
+        }
         gl.ajax.request("/addNote", {
           title: this.model.title,
           content: this.model.content,
           userId: gl.data.userId,
         }, "post").then(v => {
-          gl.data.bus.$emit("noteListChane",1);
+          gl.data.bus.$emit("noteListChane", 1);
           this.$createDialog({
             type: 'alert',
-            title:"提示",
-            content:"添加日志成功",
+            title: "提示",
+            content: "添加日志成功",
             onConfirm: () => {
               gl.methods.goBack();
             },
@@ -150,13 +173,19 @@
       validateHandler(result) {
         this.validity = result.validity;
         this.valid = result.valid;
-        console.log('validity', result.validity, result.valid, result.dirty, result.firstInvalidFieldIndex)
       },
       resetHandler(e) {
         console.log('reset', e)
       }
     },
-    created() {
+    async created() {
+      this.id = this.$route.query.id || false;
+      if (this.id) {
+        this.title = "编辑日志";
+        let detail = await gl.methods.getNoteDetail(this.id);
+        this.model.title = detail.data.title;
+        this.model.content = detail.data.content;
+      }
 
     },
     components: {

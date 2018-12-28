@@ -57,7 +57,7 @@
         return {
           0: "",
           1: "cubeic-setting",
-          2: "",
+          2: "cubeic-edit",
         }[this._props.icon];
       }
     }
